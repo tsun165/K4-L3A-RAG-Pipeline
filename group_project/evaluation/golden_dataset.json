@@ -1,0 +1,83 @@
+[
+  {
+    "question": "Theo Luật Phòng, chống ma túy 2021, chất ma túy được định nghĩa như thế nào?",
+    "expected_answer": "Chất ma túy là chất gây nghiện, chất hướng thần được quy định trong danh mục chất ma túy do Chính phủ ban hành.",
+    "expected_context": "Điều 2. Giải thích từ ngữ\nTrong Luật này, các từ ngữ dưới đây được hiểu như sau:\n1. Chất ma túy là chất gây nghiện, chất hướng thần được quy định trong danh mục chất ma túy do Chính phủ ban hành."
+  },
+  {
+    "question": "Tiền chất ma túy được hiểu như thế nào theo Luật Phòng, chống ma túy 2021?",
+    "expected_answer": "Tiền chất là hóa chất không thể thiếu được trong quá trình điều chế, sản xuất chất ma túy được quy định trong danh mục tiền chất do Chính phủ ban hành.",
+    "expected_context": "Điều 2. Giải thích từ ngữ\n4. Tiền chất là hóa chất không thể thiếu được trong quá trình điều chế, sản xuất chất ma túy được quy định trong danh mục tiền chất do Chính phủ ban hành."
+  },
+  {
+    "question": "Hành vi trồng cây có chứa chất ma túy có bị nghiêm cấm theo Luật Phòng, chống ma túy không?",
+    "expected_answer": "Có, khoản 1 Điều 5 Luật Phòng, chống ma túy 2021 quy định nghiêm cấm hành vi trồng cây có chứa chất ma túy và hướng dẫn trồng cây có chứa chất ma túy.",
+    "expected_context": "Điều 5. Các hành vi bị nghiêm cấm\n1. Trồng cây có chứa chất ma túy, hướng dẫn trồng cây có chứa chất ma túy."
+  },
+  {
+    "question": "Luật Phòng, chống ma túy 2021 nghiêm cấm các hành vi nào liên quan đến việc sử dụng trái phép chất ma túy?",
+    "expected_answer": "Nghiêm cấm các hành vi: sử dụng, tổ chức sử dụng trái phép chất ma túy; cưỡng bức, lôi kéo người khác sử dụng trái phép chất ma túy; chứa chấp, hỗ trợ việc sử dụng trái phép chất ma túy.",
+    "expected_context": "Điều 5. Các hành vi bị nghiêm cấm\n5. Sử dụng, tổ chức sử dụng trái phép chất ma túy; cưỡng bức, lôi kéo người khác sử dụng trái phép chất ma túy; chứa chấp, hỗ trợ việc sử dụng trái phép chất ma túy."
+  },
+  {
+    "question": "Thời hạn quản lý người sử dụng trái phép chất ma túy là bao lâu?",
+    "expected_answer": "Thời hạn quản lý người sử dụng trái phép chất ma túy là 01 năm kể từ ngày Chủ tịch Ủy ban nhân dân cấp xã ra quyết định quản lý.",
+    "expected_context": "Điều 23. Quản lý người sử dụng trái phép chất ma túy\n2. Thời hạn quản lý người sử dụng trái phép chất ma túy là 01 năm kể từ ngày Chủ tịch Ủy ban nhân dân cấp xã ra quyết định quản lý."
+  },
+  {
+    "question": "Người nghiện ma túy từ bao nhiêu tuổi thì bị áp dụng biện pháp xử lý hành chính đưa vào cơ sở cai nghiện bắt buộc?",
+    "expected_answer": "Người nghiện ma túy từ đủ 18 tuổi trở lên bị áp dụng biện pháp xử lý hành chính đưa vào cơ sở cai nghiện bắt buộc theo quy định của Luật Xử lý vi phạm hành chính.",
+    "expected_context": "Điều 32. Đối tượng bị áp dụng biện pháp xử lý hành chính đưa vào cơ sở cai nghiện bắt buộc\nNgười nghiện ma túy từ đủ 18 tuổi trở lên bị áp dụng biện pháp xử lý hành chính đưa vào cơ sở cai nghiện bắt buộc theo quy định của Luật Xử lý vi phạm hành chính."
+  },
+  {
+    "question": "Hành vi sử dụng trái phép chất ma túy bị xử phạt vi phạm hành chính như thế nào theo Nghị định 144/2021/NĐ-CP?",
+    "expected_answer": "Phạt cảnh cáo hoặc phạt tiền từ 1.000.000 đồng đến 2.000.000 đồng đối với hành vi sử dụng trái phép chất ma túy.",
+    "expected_context": "Điều 23. Vi phạm các quy định về phòng, chống và kiểm soát ma túy\n1. Phạt cảnh cáo hoặc phạt tiền từ 1.000.000 đồng đến 2.000.000 đồng đối với hành vi sử dụng trái phép chất ma túy."
+  },
+  {
+    "question": "Mức phạt tiền đối với hành vi trồng các loại cây có chứa chất ma túy theo Nghị định 144/2021/NĐ-CP là bao nhiêu?",
+    "expected_answer": "Phạt tiền từ 5.000.000 đồng đến 10.000.000 đồng đối với hành vi trồng các loại cây thuốc phiện, cây cần sa, cây coca, cây khát và các loại cây khác có chứa chất ma túy.",
+    "expected_context": "Điều 23. Vi phạm các quy định về phòng, chống và kiểm soát ma túy\n3. Phạt tiền từ 5.000.000 đồng đến 10.000.000 đồng đối với hành vi trồng các loại cây thuốc phiện, cây cần sa, cây coca, cây khát và các loại cây khác có chứa chất ma túy."
+  },
+  {
+    "question": "Chủ cơ sở kinh doanh dịch vụ hoặc phương tiện để xảy ra hoạt động sử dụng ma túy trong khu vực do mình quản lý bị phạt như thế nào?",
+    "expected_answer": "Bị phạt tiền từ 10.000.000 đồng đến 20.000.000 đồng theo quy định tại điểm a khoản 4 Điều 23 Nghị định 144/2021/NĐ-CP.",
+    "expected_context": "Điều 23. Vi phạm các quy định về phòng, chống và kiểm soát ma túy\n4. Phạt tiền từ 10.000.000 đồng đến 20.000.000 đồng đối với một trong những hành vi sau đây:\na) Người đứng đầu, người đại diện theo pháp luật, người được giao quản lý cơ sở kinh doanh, dịch vụ, người quản lý phương tiện giao thông hoặc cá nhân khác có trách nhiệm quản lý nhà hàng, cơ sở cho thuê lưu trú, câu lạc bộ, hoạt động kinh doanh karaoke, hoạt động kinh doanh vũ trường, kinh doanh trò chơi điện tử, các phương tiện giao thông để xảy ra hoạt động tàng trữ, mua bán, sử dụng trái phép chất ma túy trong khu vực, phương tiện do mình quản lý;"
+  },
+  {
+    "question": "Theo Nghị định 105/2021/NĐ-CP, có những cơ quan chuyên trách phòng, chống tội phạm về ma túy nào?",
+    "expected_answer": "Bao gồm 4 cơ quan chuyên trách thuộc: Công an nhân dân, Bộ đội Biên phòng, Cảnh sát biển và Hải quan.",
+    "expected_context": "Điều 5. Các cơ quan chuyên trách phòng, chống tội phạm về ma túy\n1. Cơ quan chuyên trách phòng, chống tội phạm về ma túy thuộc Công an nhân dân...\n2. Cơ quan chuyên trách phòng, chống tội phạm về ma túy thuộc Bộ đội Biên phòng...\n3. Cơ quan chuyên trách phòng, chống tội phạm về ma túy thuộc Cảnh sát biển...\n4. Cơ quan chuyên trách phòng, chống tội phạm ma túy thuộc Hải quan..."
+  },
+  {
+    "question": "Chế độ giao ban định kỳ giữa các cơ quan chuyên trách phòng, chống tội phạm ma túy ở cấp trung ương và cấp tỉnh diễn ra như thế nào?",
+    "expected_answer": "Cấp trung ương luân phiên chủ trì tổ chức giao ban định kỳ mỗi năm một lần; cấp tỉnh luân phiên chủ trì tổ chức giao ban định kỳ 6 tháng một lần.",
+    "expected_context": "Điều 13. Chế độ giao ban, báo cáo và thống kê\n1. Chế độ giao ban\na) Các cơ quan chuyên trách phòng, chống tội phạm về ma túy thực hiện chế độ giao ban định kỳ như sau:\nCấp trung ương: Luân phiên chủ trì tổ chức giao ban định kỳ mỗi năm một lần.\nCấp tỉnh: Luân phiên chủ trì tổ chức giao ban định kỳ 6 tháng một lần."
+  },
+  {
+    "question": "Ca sĩ Miu Lê bị khởi tố và bắt tạm giam về hành vi gì và ở đâu?",
+    "expected_answer": "Ca sĩ Miu Lê (Lê Ánh Nhật) bị Cơ quan CSĐT Công an TP Hải Phòng khởi tố, bắt tạm giam về hành vi Tổ chức sử dụng trái phép chất ma túy sau khi bị phát hiện tại bãi tắm Tùng Thu, đặc khu Cát Hải, đảo Cát Bà, Hải Phòng.",
+    "expected_context": "Ngày 16/5, Cơ quan CSĐT Công an thành phố Hải Phòng đã ra quyết định khởi tố, lệnh bắt tạm giam đối với Lê Ánh Nhật (ca sĩ Miu Lê, 35 tuổi, trú TP HCM) cùng Vũ Khương An (31 tuổi, quốc tịch Việt Nam và Canada) về hành vi Tổ chức sử dụng trái phép chất ma túy... kiểm tra tại khu vực bãi tắm Tùng Thu, thuộc thôn 2 Cát Bà, đặc khu Cát Hải, Hải Phòng, phát hiện 6 người có hành vi sử dụng trái phép chất ma túy."
+  },
+  {
+    "question": "Kết quả xét nghiệm nhanh ma túy của ca sĩ Miu Lê dương tính với các chất gì?",
+    "expected_answer": "Miu Lê có kết quả xét nghiệm dương tính với Methamphetamine, Ketamine và MDMA.",
+    "expected_context": "Kết quả xét nghiệm nhanh cho thấy 6 người dương tính với ma túy. Trong đó, Miu Lê và 3 người dương tính với Methamphetamine, Ketamine và MDMA."
+  },
+  {
+    "question": "Ca sĩ Tăng Nhật Tuệ bị Công an TP HCM bắt vì những hành vi nào và vụ án có bao nhiêu người bị khởi tố?",
+    "expected_answer": "Tăng Nhật Tuệ bị bắt vì các hành vi mua bán, tàng trữ và tổ chức sử dụng ma túy (cụ thể có dấu hiệu tổ chức sử dụng và tàng trữ trái phép). Công an TP HCM đã khởi tố 39 người trong đường dây này.",
+    "expected_context": "Ngày 3/7, Lê Duy Linh (40 tuổi; tức ca sĩ, nhạc sĩ Tăng Nhật Tuệ) cùng 38 người khác bị Công an phường Chánh Hưng phối hợp cùng Phòng Cảnh sát điều tra tội phạm về ma túy Công an TP HCM bắt về các hành vi Mua bán, tàng trữ và tổ chức sử dụng ma túy... Sau quá trình sàng lọc, Công an TP HCM đã khởi tố 39 người về các hành vi mua bán, tàng trữ và tổ chức sử dụng trái phép chất ma túy."
+  },
+  {
+    "question": "Đối tượng nào được gọi là 'Trường ca sĩ' bị bắt tại Cần Thơ và vì hành vi gì?",
+    "expected_answer": "Nguyễn Vũ Trường (sinh năm 1986, ngụ ấp Phú Xuân, xã Châu Thành, TP Cần Thơ, còn gọi là Trường ca sĩ) bị bắt tạm giam về hành vi Tổ chức sử dụng trái phép chất ma túy cho một nhóm thanh niên tại nhà riêng.",
+    "expected_context": "Ngày 14/9, cơ quan CSĐT Công an TP Cần Thơ cho biết vừa bắt tạm giam Nguyễn Vũ Trường, còn gọi là Trường ca sĩ (SN 1986, ngụ ấp Phú Xuân, xã Châu Thành, TP Cần Thơ) về hành vi “Tổ chức sử dụng trái phép chất ma túy”... phát hiện 5 thanh niên nam, nữ đang sử dụng trái phép chất ma túy tại nhà của Trường ca sĩ."
+  },
+  {
+    "question": "Rapper Bình Gold bị lực lượng chức năng phát hiện dương tính với chất ma túy nào và trong bối cảnh nào?",
+    "expected_answer": "Rapper Bình Gold bị phát hiện điều khiển xe lạng lách, chèn ép phương tiện khác trên cao tốc Nội Bài - Lào Cai; qua kiểm tra xác định dương tính với cần sa và bồ đà.",
+    "expected_context": "Năm 2025, rapper Bình Gold, tên thật Vũ Xuân Bình, sinh năm 1997... bị phát hiện điều khiển xe lạng lách, chèn ép các phương tiện khác trên cao tốc Nội Bài - Lào Cai, có dấu hiệu gây rối trật tự công cộng. Sau khi dừng xe kiểm tra, lực lượng chức năng xác định Bình Gold dương tính với chất ma túy gồm cần sa và bồ đà."
+  }
+]
+

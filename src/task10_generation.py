@@ -39,7 +39,7 @@ Mỗi khẳng định phải có citation. Nếu thiếu evidence, hãy từ ch�
 
 
 def reorder_for_llm(chunks: list[dict]) -> list[dict]:
-    """Đưa chunks quan trọng về đầu và cuối context (giảm lost-in-the-middle)."""
+    """Đưa chunks quan trọng về đầu và cuối context để chống lost-in-the-middle."""
     if len(chunks) <= 2:
         return list(chunks)
     front = chunks[::2]
@@ -48,16 +48,15 @@ def reorder_for_llm(chunks: list[dict]) -> list[dict]:
 
 
 def format_context(chunks: list[dict]) -> str:
-    """Tạo context có title và source label rõ ràng cho từng chunk."""
+    """Tạo context có title và source label cho LLM trích dẫn."""
     parts = []
     for index, chunk in enumerate(chunks, 1):
         metadata = chunk.get("metadata", {})
-        title = metadata.get("title", "")
-        source = metadata.get("source", "")
+        title = metadata.get("title", "Tài liệu")
+        source = metadata.get("source", "Nguồn không xác định")
         content = chunk.get("content", "")
         parts.append(
-            f"[Document {index} | Title: {title} | "
-            f"Source: {source}]\n{content}"
+            f"[Document {index} | Title: {title} | Source: {source}]\n{content}"
         )
     return "\n\n---\n\n".join(parts)
 

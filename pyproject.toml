@@ -3,9 +3,9 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "k4-day08-rag-pipeline"
+name = "k4-l3a-rag-pipeline"
 version = "0.1.0"
-description = "Day 8 lab for building and evaluating a RAG pipeline"
+description = "K4-L3A group RAG pipeline for Vietnamese drug-law regulations and related news"
 readme = "README.md"
 requires-python = ">=3.10,<3.14"
 dependencies = [

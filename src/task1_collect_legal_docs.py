@@ -23,21 +23,30 @@ def setup_directory() -> None:
     print(f"Ready: {DATA_DIR}")
 
 
+SOURCES = {
+    "luat-73-2021-qh14-phong-chong-ma-tuy.pdf": (
+        "https://datafiles.chinhphu.vn/cpp/files/vbpq/2022/01/73luat.pdf"
+    ),
+    "nghi-dinh-105-2021-nd-cp-huong-dan-luat-phong-chong-ma-tuy.pdf": (
+        "https://datafiles.chinhphu.vn/cpp/files/vbpq/2021/12/105.signed_02.pdf"
+    ),
+    "nghi-dinh-144-2021-nd-cp-xu-phat-vi-pham-hanh-chinh.pdf": (
+        "https://datafiles.chinhphu.vn/cpp/files/vbpq/2022/01/144.signed.pdf"
+    ),
+}
+
+
 def download_documents() -> None:
     """Tải ít nhất 3 PDF/DOCX từ nguồn công khai."""
-    # TODO: Có thể tải thủ công hoặc dùng requests.
-    #
-    # Ví dụ:
-    # import requests
-    #
-    # sources = {
-    #     "policy-a.pdf": "https://example.edu/policy-a.pdf",
-    # }
-    # for filename, url in sources.items():
-    #     response = requests.get(url, timeout=30)
-    #     response.raise_for_status()
-    #     (DATA_DIR / filename).write_bytes(response.content)
-    raise NotImplementedError("Implement download_documents")
+    import requests
+
+    headers = {"User-Agent": "Mozilla/5.0 (compatible; RAGLabBot/1.0)"}
+    for filename, url in SOURCES.items():
+        destination = DATA_DIR / filename
+        response = requests.get(url, headers=headers, timeout=30)
+        response.raise_for_status()
+        destination.write_bytes(response.content)
+        print(f"Downloaded: {destination}")
 
 
 if __name__ == "__main__":
