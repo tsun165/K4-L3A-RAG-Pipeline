@@ -72,9 +72,9 @@ def call_llm(system_prompt: str, user_message: str) -> str:
         if not api_key:
             return "[Lỗi: Thiếu GEMINI_API_KEY trong file .env]"
 
-        model_name = model or "gemini-2.5-flash"
+        model_name = model or "gemini-3.6-flash"
 
-        # Thử SDK google-genai mới
+        # Gọi Google GenAI SDK
         try:
             from google import genai
             client = genai.Client(api_key=api_key)
@@ -84,21 +84,8 @@ def call_llm(system_prompt: str, user_message: str) -> str:
                 config={"system_instruction": system_prompt, "temperature": TEMPERATURE}
             )
             return response.text
-        except Exception:
-            pass
-
-        # Thử fallback SDK google-generativeai cũ
-        try:
-            import google.generativeai as genai_legacy
-            genai_legacy.configure(api_key=api_key)
-            model_inst = genai_legacy.GenerativeModel(
-                model_name=model_name if "gemini" in model_name else "gemini-1.5-flash",
-                system_instruction=system_prompt
-            )
-            resp = model_inst.generate_content(user_message)
-            return resp.text
         except Exception as e:
-            return f"[Lỗi gọi Gemini API: {e}]"
+            return f"[Lỗi gọi Gemini API ({model_name}): {e}]"
 
     # Nhánh 2: OpenAI
     elif provider == "openai":
