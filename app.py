@@ -3,6 +3,17 @@ import time
 import streamlit as st
 from dotenv import load_dotenv
 
+from src.task10_generation import (
+    SYSTEM_PROMPT,
+    format_context,
+    reorder_for_llm,
+    call_llm,
+)
+from src.task9_retrieval_pipeline import retrieve
+from src.task5_semantic_search import semantic_search
+from src.task6_lexical_search import lexical_search
+from src.task8_pageindex_vectorless import pageindex_search
+
 load_dotenv()
 
 # Cấu hình trang (Wide layout)
@@ -189,6 +200,41 @@ def mock_generate_with_citation(query: str, top_k: int = 5) -> dict:
     }
 
 
+def real_generate_with_citation(query: str, top_k: int = 5, mode: str = "Hybrid", threshold: float = 0.3) -> dict:
+    """Truy vấn pipeline thật từ các module Task 5, 6, 7, 8, 9, 10."""
+    try:
+        if "Dense-only" in mode:
+            chunks = semantic_search(query, top_k=top_k)
+        elif "Lexical-only" in mode:
+            chunks = lexical_search(query, top_k=top_k)
+        elif "Vectorless" in mode:
+            chunks = pageindex_search(query, top_k=top_k)
+        else:  # Hybrid (RRF + Fallback)
+            chunks = retrieve(query, top_k=top_k, score_threshold=threshold, use_reranking=True)
+
+        if not chunks:
+            return {
+                "answer": "Tôi không thể xác minh thông tin này từ nguồn dữ liệu hiện có trong hệ thống pháp luật và tin tức về phòng, chống ma túy.",
+                "sources": [],
+                "retrieval_source": "none",
+            }
+
+        reordered = reorder_for_llm(chunks)
+        context = format_context(reordered)
+        user_message = f"Context:\n{context}\n\nQuestion: {query}"
+        answer = call_llm(SYSTEM_PROMPT, user_message)
+
+        retrieval_source = chunks[0].get("retrieval_method", "hybrid")
+        return {
+            "answer": answer,
+            "sources": chunks,
+            "retrieval_source": retrieval_source,
+        }
+    except Exception as e:
+        st.warning(f"Lưu ý: Pipeline thật báo lỗi ({e}), chuyển sang dữ liệu mẫu.")
+        return mock_generate_with_citation(query, top_k=top_k)
+
+
 def stream_response(text: str):
     """Hiệu ứng gõ chữ khi hiển thị câu trả lời."""
     for word in text.split(" "):
@@ -213,13 +259,14 @@ with st.sidebar:
     st.divider()
 
     st.subheader("⚙️ Cấu hình Retrieval")
+    use_real_pipeline = st.toggle("Sử dụng Pipeline thật (Gemini LLM)", value=True, help="Bật để gọi mô hình Gemini và hệ thống truy xuất thật")
     top_k = st.slider("Số lượng chunks (top_k)", min_value=1, max_value=10, value=5, step=1)
     retrieval_mode = st.selectbox(
         "Chế độ Retrieval",
         ["Hybrid (Dense + BM25 + RRF)", "Dense-only (ChromaDB)", "Lexical-only (BM25)", "Vectorless (PageIndex)"],
         index=0,
     )
-    score_threshold = st.slider("Ngưỡng Fallback Score", 0.0, 1.0, 0.45, 0.05)
+    score_threshold = st.slider("Ngưỡng Fallback Score", 0.0, 1.0, 0.3, 0.05)
 
     st.divider()
     st.subheader("💡 Câu hỏi mẫu")
@@ -275,11 +322,19 @@ with col_chat:
             with st.chat_message("user"):
                 st.markdown(new_user_prompt)
 
-            # 2. Assistant với Effect đang tìm kiếm đơn giản
+            # 2. Assistant với Effect đang tìm kiếm
             with st.chat_message("assistant"):
-                with st.spinner("🔍 Đang tìm kiếm tài liệu..."):
-                    time.sleep(0.8)
-                    gen_result = mock_generate_with_citation(new_user_prompt, top_k=top_k)
+                with st.spinner("🔍 Đang tìm kiếm tài liệu và sinh câu trả lời..."):
+                    if use_real_pipeline:
+                        gen_result = real_generate_with_citation(
+                            new_user_prompt,
+                            top_k=top_k,
+                            mode=retrieval_mode,
+                            threshold=score_threshold,
+                        )
+                    else:
+                        time.sleep(0.5)
+                        gen_result = mock_generate_with_citation(new_user_prompt, top_k=top_k)
 
                 # Hiệu ứng gõ chữ (stream effect) cho câu trả lời
                 st.write_stream(stream_response(gen_result["answer"]))
