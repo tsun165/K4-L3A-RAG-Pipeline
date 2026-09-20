@@ -3,6 +3,8 @@ import time
 import streamlit as st
 from dotenv import load_dotenv
 
+from src.task10_generation import generate_with_citation
+
 load_dotenv()
 
 # Cấu hình trang (Wide layout)
@@ -69,131 +71,11 @@ st.markdown(
 )
 
 
-def mock_generate_with_citation(query: str, top_k: int = 5) -> dict:
-    """Hàm giả lập GenerationResult theo đúng Module Contract."""
-    q = query.lower()
-
-    # Trường hợp 1: Query ngoài domain -> Safe refusal
-    if any(k in q for k in ["thời tiết", "nấu ăn", "bóng đá", "tổng thống", "du lịch"]):
-        return {
-            "answer": "Tôi không thể xác minh thông tin này từ nguồn dữ liệu hiện có trong hệ thống pháp luật và tin tức về phòng, chống ma túy.",
-            "sources": [],
-            "retrieval_source": "none",
-        }
-
-    # Trường hợp 2: Vụ việc ca sĩ Miu Lê
-    if "miu lê" in q or "cát bà" in q or "tùng thu" in q:
-        sources = [
-            {
-                "id": "article_01-chunk-0",
-                "content": "Ngày 16/5, Cơ quan CSĐT Công an thành phố Hải Phòng đã ra quyết định khởi tố, lệnh bắt tạm giam đối với Lê Ánh Nhật (ca sĩ Miu Lê, 35 tuổi, trú TP HCM) cùng Vũ Khương An về hành vi 'Tổ chức sử dụng trái phép chất ma túy'.",
-                "score": 0.94,
-                "metadata": {
-                    "source": "article_01.md",
-                    "title": "Ca sĩ Miu Lê bị bắt với cáo buộc tổ chức sử dụng ma túy",
-                    "doc_type": "news",
-                    "url": "https://vnexpress.net/ca-si-miu-le-bi-bat-voi-cao-buoc-to-chuc-su-dung-ma-tuy-5074769.html",
-                    "chunk_index": 0,
-                },
-                "retrieval_method": "hybrid",
-            },
-            {
-                "id": "article_01-chunk-1",
-                "content": "Kết quả xét nghiệm nhanh cho thấy Miu Lê và 3 người dương tính với Methamphetamine, Ketamine và MDMA. Khám xét hiện trường tại bãi tắm Tùng Thu, công an thu giữ ma túy tổng hợp nước vui và Ketamine.",
-                "score": 0.88,
-                "metadata": {
-                    "source": "article_01.md",
-                    "title": "Ca sĩ Miu Lê bị bắt với cáo buộc tổ chức sử dụng ma túy",
-                    "doc_type": "news",
-                    "url": "https://vnexpress.net/ca-si-miu-le-bi-bat-voi-cao-buoc-to-chuc-su-dung-ma-tuy-5074769.html",
-                    "chunk_index": 1,
-                },
-                "retrieval_method": "hybrid",
-            },
-        ]
-        return {
-            "answer": "Theo tài liệu báo chí [Nguồn 1], ca sĩ Miu Lê (tên thật: Lê Ánh Nhật) đã bị Cơ quan CSĐT Công an TP Hải Phòng khởi tố và bắt tạm giam về hành vi **'Tổ chức sử dụng trái phép chất ma túy'** tại khu vực bãi tắm Tùng Thu, đảo Cát Bà, Hải Phòng. Kết quả xét nghiệm xác định dương tính với **Methamphetamine, Ketamine và MDMA** [Nguồn 2].",
-            "sources": sources[:top_k],
-            "retrieval_source": "hybrid",
-        }
-
-    # Trường hợp 3: Mức xử phạt hành chính theo Nghị định 144
-    if "mức phạt" in q or "phạt tiền" in q or "nghị định 144" in q or "bao nhiêu" in q:
-        sources = [
-            {
-                "id": "nd144-chunk-57",
-                "content": "Điều 23. Vi phạm các quy định về phòng, chống và kiểm soát ma túy:\n1. Phạt cảnh cáo hoặc phạt tiền từ 1.000.000 đồng đến 2.000.000 đồng đối với hành vi sử dụng trái phép chất ma túy.\n3. Phạt tiền từ 5.000.000 đồng đến 10.000.000 đồng đối với hành vi trồng các loại cây thuốc phiện, cây cần sa, cây coca, cây khát và các loại cây khác có chứa chất ma túy.",
-                "score": 0.95,
-                "metadata": {
-                    "source": "nghi-dinh-144-2021-nd-cp-xu-phat-vi-pham-hanh-chinh.md",
-                    "title": "Nghị định 144/2021/NĐ-CP xử phạt vi phạm hành chính",
-                    "doc_type": "legal",
-                    "url": "https://vanban.vcci.com.vn/nghi-dinh-1442021nd-cp",
-                    "chunk_index": 57,
-                },
-                "retrieval_method": "hybrid",
-            },
-            {
-                "id": "nd144-chunk-58",
-                "content": "Điều 23 khoản 4: Phạt tiền từ 10.000.000 đồng đến 20.000.000 đồng đối với người đứng đầu, người quản lý cơ sở kinh doanh (karaoke, khách sạn...) để xảy ra hoạt động tàng trữ, mua bán, sử dụng trái phép chất ma túy trong khu vực mình quản lý.",
-                "score": 0.86,
-                "metadata": {
-                    "source": "nghi-dinh-144-2021-nd-cp-xu-phat-vi-pham-hanh-chinh.md",
-                    "title": "Nghị định 144/2021/NĐ-CP xử phạt vi phạm hành chính",
-                    "doc_type": "legal",
-                    "url": "https://vanban.vcci.com.vn/nghi-dinh-1442021nd-cp",
-                    "chunk_index": 58,
-                },
-                "retrieval_method": "hybrid",
-            },
-        ]
-        return {
-            "answer": "Căn cứ theo **Điều 23 Nghị định số 144/2021/NĐ-CP** [Nguồn 1]:\n- **Hành vi sử dụng trái phép chất ma túy:** Phạt cảnh cáo hoặc phạt tiền từ **1.000.000 đồng đến 2.000.000 đồng**.\n- **Hành vi trồng cây có chứa chất ma túy (cần sa, thuốc phiện,...):** Phạt tiền từ **5.000.000 đồng đến 10.000.000 đồng**.\n- **Người quản lý cơ sở kinh doanh (karaoke, khách sạn) để xảy ra ma túy:** Phạt từ **10.000.000 đồng đến 20.000.000 đồng** kèm tước giấy phép 6-12 tháng [Nguồn 2].",
-            "sources": sources[:top_k],
-            "retrieval_source": "hybrid",
-        }
-
-    # Trường hợp mặc định: Luật Phòng, chống ma túy 2021
-    sources = [
-        {
-            "id": "luat73-chunk-15",
-            "content": "Điều 5. Các hành vi bị nghiêm cấm:\n1. Trồng cây có chứa chất ma túy, hướng dẫn trồng cây có chứa chất ma túy.\n2. Nghiên cứu, sản xuất, tàng trữ, vận chuyển, mua bán trái phép chất ma túy...\n5. Sử dụng, tổ chức sử dụng trái phép chất ma túy; cưỡng bức, lôi kéo người khác sử dụng trái phép chất ma túy.",
-            "score": 0.91,
-            "metadata": {
-                "source": "luat-73-2021-qh14-phong-chong-ma-tuy.md",
-                "title": "Luật Phòng, chống ma túy số 73/2021/QH14",
-                "doc_type": "legal",
-                "url": None,
-                "chunk_index": 15,
-            },
-            "retrieval_method": "hybrid",
-        },
-        {
-            "id": "luat73-chunk-23",
-            "content": "Điều 23. Quản lý người sử dụng trái phép chất ma túy:\n1. Quản lý người sử dụng trái phép chất ma túy là biện pháp phòng ngừa nhằm giúp người sử dụng không tiếp tục sử dụng trái phép chất ma túy...\n2. Thời hạn quản lý là 01 năm kể từ ngày Chủ tịch UBND cấp xã ra quyết định quản lý.",
-            "score": 0.85,
-            "metadata": {
-                "source": "luat-73-2021-qh14-phong-chong-ma-tuy.md",
-                "title": "Luật Phòng, chống ma túy số 73/2021/QH14",
-                "doc_type": "legal",
-                "url": None,
-                "chunk_index": 23,
-            },
-            "retrieval_method": "hybrid",
-        },
-    ]
-    return {
-        "answer": f"Theo quy định của **Luật Phòng, chống ma túy năm 2021 (Luật số 73/2021/QH14)** [Nguồn 1], pháp luật nghiêm cấm triệt để các hành vi: trồng cây có chứa chất ma túy; sản xuất, tàng trữ, vận chuyển, mua bán, sử dụng và tổ chức sử dụng trái phép chất ma túy. Thời hạn quản lý người sử dụng trái phép chất ma túy tại cấp xã là **01 năm** [Nguồn 2].",
-        "sources": sources[:top_k],
-        "retrieval_source": "hybrid",
-    }
-
-
 def stream_response(text: str):
     """Hiệu ứng gõ chữ khi hiển thị câu trả lời."""
-    for word in text.split(" "):
+    for word in str(text).split(" "):
         yield word + " "
-        time.sleep(0.04)
+        time.sleep(0.03)
 
 
 # Khởi tạo Session State
@@ -219,7 +101,7 @@ with st.sidebar:
         ["Hybrid (Dense + BM25 + RRF)", "Dense-only (ChromaDB)", "Lexical-only (BM25)", "Vectorless (PageIndex)"],
         index=0,
     )
-    score_threshold = st.slider("Ngưỡng Fallback Score", 0.0, 1.0, 0.45, 0.05)
+    score_threshold = st.slider("Ngưỡng Fallback Score", 0.0, 1.0, 0.30, 0.05)
 
     st.divider()
     st.subheader("💡 Câu hỏi mẫu")
@@ -253,7 +135,7 @@ if st.session_state.pending_query:
 # ----- CỘT TRÁI: KHUNG CHAT RIÊNG BIỆT (SCROLLABLE) -----
 with col_chat:
     st.markdown('<div class="main-title">Hệ thống Trợ lý Pháp lý & Tra cứu Ma túy</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-title">Tra cứu dựa trên Luật số 73/2021/QH14, Nghị định 144/2021, Nghị định 105/2021 và tin tức thực tế.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-title">Pipeline RAG thật tích hợp Dense Vector, BM25 Okapi, RRF Fusion và PageIndex Fallback.</div>', unsafe_allow_html=True)
 
     # Khung Chat có thanh cuộn riêng (height=560) cố định, không phải cuộn cả trang
     chat_box = st.container(height=560)
@@ -268,18 +150,17 @@ with col_chat:
                         source_names = list({s["metadata"]["source"] for s in sources})
                         st.caption(f"📌 Nguồn: {', '.join(source_names)} | Phương thức: `{method}`")
 
-        # Nếu có câu hỏi mới cần xử lý, hiển thị và chạy hiệu ứng tìm kiếm ngay trong chat_box
+        # Nếu có câu hỏi mới cần xử lý, chạy pipeline thật ngay trong chat_box
         if new_user_prompt:
             # 1. Thêm user message
             st.session_state.messages.append({"role": "user", "content": new_user_prompt})
             with st.chat_message("user"):
                 st.markdown(new_user_prompt)
 
-            # 2. Assistant với Effect đang tìm kiếm đơn giản
+            # 2. Assistant gọi trực tiếp pipeline thật (src.task10_generation)
             with st.chat_message("assistant"):
-                with st.spinner("🔍 Đang tìm kiếm tài liệu..."):
-                    time.sleep(0.8)
-                    gen_result = mock_generate_with_citation(new_user_prompt, top_k=top_k)
+                with st.spinner("🔍 Đang truy vấn kho dữ liệu và tổng hợp câu trả lời..."):
+                    gen_result = generate_with_citation(new_user_prompt, top_k=top_k)
 
                 # Hiệu ứng gõ chữ (stream effect) cho câu trả lời
                 st.write_stream(stream_response(gen_result["answer"]))
@@ -309,30 +190,25 @@ with col_citation:
     st.subheader("📑 Bằng chứng & Trích dẫn (Citations)")
     st.caption("Các đoạn trích tài liệu được RAG Pipeline đối soát làm căn cứ trả lời.")
 
-    # Tìm câu trả lời của trợ lý để hiển thị trích dẫn (mặc định lấy câu gần nhất)
     assistant_messages = [
         (i, m) for i, m in enumerate(st.session_state.messages) if m["role"] == "assistant"
     ]
 
-    if not assistant_messages:
-        # Hộp thông báo rỗng
-        citation_box = st.container(height=560)
-        with citation_box:
-            st.info("💡 Chưa có trích dẫn nào.\n\nHãy nhập câu hỏi hoặc chọn câu hỏi mẫu ở cột bên trái. Sau khi hệ thống hoàn tất tra cứu, toàn bộ tài liệu đối chiếu và đoạn trích sẽ tự động hiển thị tại đây.")
-    else:
-        # Lấy tin nhắn cần soi (mặc định là câu mới nhất)
-        if st.session_state.inspect_index is not None and st.session_state.inspect_index < len(st.session_state.messages):
-            selected_msg = st.session_state.messages[st.session_state.inspect_index]
+    citation_box = st.container(height=560)
+    with citation_box:
+        if not assistant_messages:
+            st.info("💡 Chưa có trích dẫn nào.\n\nHãy nhập câu hỏi hoặc chọn câu hỏi mẫu ở cột bên trái. Toàn bộ tài liệu đối chiếu và đoạn trích từ pipeline thật sẽ tự động hiển thị tại đây.")
         else:
-            selected_msg = assistant_messages[-1][1]
+            if st.session_state.inspect_index is not None and st.session_state.inspect_index < len(st.session_state.messages):
+                selected_msg = st.session_state.messages[st.session_state.inspect_index]
+            else:
+                selected_msg = assistant_messages[-1][1]
 
-        active_sources = selected_msg.get("sources", [])
-        active_method = selected_msg.get("retrieval_source", "none")
+            active_sources = selected_msg.get("sources", [])
+            active_method = selected_msg.get("retrieval_source", "none")
 
-        citation_box = st.container(height=560)
-        with citation_box:
             if not active_sources:
-                st.warning("⚠️ **Không có nguồn trích dẫn:**\nCâu hỏi ngoài phạm vi dữ liệu hoặc không tìm thấy bằng chứng phù hợp trong kho tài liệu (Safe Refusal).")
+                st.warning("⚠️ **Không có nguồn trích dẫn:**\nCâu hỏi ngoài phạm vi dữ liệu hoặc hệ thống thực hiện từ chối an toàn (*Safe Refusal*).")
             else:
                 st.markdown(
                     f"""
