@@ -43,13 +43,21 @@ SOURCE_PATTERN = re.compile(r"^\*\*Source:\*\*\s+(\S+)$", re.MULTILINE)
 def _sentence_transformer():
     from sentence_transformers import SentenceTransformer
 
-    return SentenceTransformer(EMBEDDING_MODEL)
+    model = SentenceTransformer(EMBEDDING_MODEL)
+    # bge-m3 mặc định max_seq_length=8192; chunk chỉ 500 ký tự nên để nguyên
+    # sẽ cấp phát thừa bộ nhớ và làm tiến trình segfault trên Windows.
+    model.max_seq_length = 512
+    return model
 
 
 def embed_texts(texts: list[str]) -> list[list[float]]:
     """Embed danh sách text bằng provider được chọn trong .env."""
     if EMBEDDING_PROVIDER == "sentence_transformers":
-        return _sentence_transformer().encode(texts).tolist()
+        return (
+            _sentence_transformer()
+            .encode(texts, batch_size=8, show_progress_bar=len(texts) > 100)
+            .tolist()
+        )
 
     if EMBEDDING_PROVIDER == "openai":
         from openai import OpenAI
