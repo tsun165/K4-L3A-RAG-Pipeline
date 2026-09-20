@@ -12,8 +12,15 @@ chạy lại pipeline không tạo dữ liệu trùng. Task 5 phải dùng chung
 """
 
 import os
+import sys
 from pathlib import Path
 from dotenv import load_dotenv
+
+if sys.stdout.encoding != "utf-8":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
 
 load_dotenv()
 
@@ -49,17 +56,37 @@ def embed_texts(texts: list[str]) -> list[list[float]]:
     provider = os.getenv("EMBEDDING_PROVIDER", EMBEDDING_PROVIDER).lower()
 
     if provider in ("gemini", "google"):
+        import time
         api_key = os.getenv("GEMINI_API_KEY") or os.getenv("gemini_api_key") or os.getenv("GOOGLE_API_KEY")
-        try:
-            from google import genai
-            client = genai.Client(api_key=api_key)
-            result = client.models.embed_content(
-                model="text-embedding-004",
-                contents=texts,
-            )
-            return [e.values for e in result.embeddings]
-        except Exception:
-            pass
+        model_name = os.getenv("EMBEDDING_MODEL") or "gemini-embedding-001"
+        if "gemini" not in model_name:
+            model_name = "gemini-embedding-001"
+
+        from google import genai
+        client = genai.Client(api_key=api_key)
+        all_embeddings = []
+        batch_size = 100
+
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i + batch_size]
+            max_retries = 5
+            for attempt in range(max_retries):
+                try:
+                    result = client.models.embed_content(
+                        model=model_name,
+                        contents=batch,
+                    )
+                    all_embeddings.extend([e.values for e in result.embeddings])
+                    time.sleep(2.0)
+                    break
+                except Exception as e:
+                    err_str = str(e)
+                    if ("429" in err_str or "RESOURCE_EXHAUSTED" in err_str) and attempt < max_retries - 1:
+                        print(f"[Gemini Quota Limit] Dang cho 13s de hoi phục quota (lan {attempt+1}/{max_retries})...")
+                        time.sleep(13.0)
+                    else:
+                        raise e
+        return all_embeddings
 
     # Mặc định sử dụng sentence-transformers cục bộ
     model = _get_sentence_transformer()
@@ -148,11 +175,16 @@ def index_to_vectorstore(chunks: list[dict]) -> None:
     batch_size = 100
     for i in range(0, len(chunks), batch_size):
         batch = chunks[i:i + batch_size]
+        # ChromaDB không chấp nhận value là None trong metadata, đổi thành ""
+        clean_metadatas = [
+            {k: ("" if v is None else v) for k, v in chunk["metadata"].items()}
+            for chunk in batch
+        ]
         collection.upsert(
             ids=[chunk["id"] for chunk in batch],
             documents=[chunk["content"] for chunk in batch],
             embeddings=[chunk["embedding"] for chunk in batch],
-            metadatas=[chunk["metadata"] for chunk in batch],
+            metadatas=clean_metadatas,
         )
 
 
