@@ -32,30 +32,26 @@ Mỗi khẳng định phải có citation. Nếu thiếu evidence, hãy từ ch�
 
 
 def reorder_for_llm(chunks: list[dict]) -> list[dict]:
-    """Đưa chunks quan trọng về đầu và cuối context."""
-    # TODO: Implement document reordering.
-    #
-    # if len(chunks) <= 2:
-    #     return list(chunks)
-    # front = chunks[::2]
-    # back = chunks[1::2]
-    # return front + back[::-1]
-    raise NotImplementedError("Implement reorder_for_llm")
+    """Đưa chunks quan trọng về đầu và cuối context để chống lost-in-the-middle."""
+    if len(chunks) <= 2:
+        return list(chunks)
+    front = chunks[::2]
+    back = chunks[1::2]
+    return front + back[::-1]
 
 
 def format_context(chunks: list[dict]) -> str:
-    """Tạo context có title và source label."""
-    # TODO: Format chunks để LLM tạo citation kiểm chứng được.
-    #
-    # parts = []
-    # for index, chunk in enumerate(chunks, 1):
-    #     metadata = chunk["metadata"]
-    #     parts.append(
-    #         f"[Document {index} | Title: {metadata['title']} | "
-    #         f"Source: {metadata['source']}]\n{chunk['content']}"
-    #     )
-    # return "\n\n---\n\n".join(parts)
-    raise NotImplementedError("Implement format_context")
+    """Tạo context có title và source label cho LLM trích dẫn."""
+    parts = []
+    for index, chunk in enumerate(chunks, 1):
+        metadata = chunk.get("metadata", {})
+        title = metadata.get("title", "Tài liệu")
+        source = metadata.get("source", "Nguồn không xác định")
+        content = chunk.get("content", "")
+        parts.append(
+            f"[Document {index} | Title: {title} | Source: {source}]\n{content}"
+        )
+    return "\n\n---\n\n".join(parts)
 
 
 def call_llm(system_prompt: str, user_message: str) -> str:
